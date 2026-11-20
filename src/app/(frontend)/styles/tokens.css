@@ -1,0 +1,30 @@
+:root {
+  --navy: #263259;
+  --navy-deep: #18213f;
+  --night: #141a2e;
+  --blue: #0a66e8;
+  --blue-deep: #0846a6;
+  --blue-night: #062f6e;
+  --green: #14804a;
+  --green-dark: #0f6a3d;
+  --green-bright: #1fa463;
+  --sun: #f8c64b;
+  --sun-deep: #e5ae2e;
+  --sun-ink: #1f2937;
+  --cream: #f5efe6;
+  --sand: #ede5d8;
+  --line: #e2d8c8;
+  --muted: #6a6f7e;
+  --tint-blue: #e3effc;
+  --tint-green: #e9f5ee;
+  --ink: #1c2440;
+  --radius: 18px;
+}
+
+/* --serif, --sans, and --mono are injected on <html> by next/font/google */
+body {
+  margin: 0;
+  background-color: var(--cream);
+  color: var(--ink);
+  font-family: var(--sans), system-ui, -apple-system, sans-serif;
+}

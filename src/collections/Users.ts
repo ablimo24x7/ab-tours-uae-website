@@ -34,6 +34,7 @@ export const Users: CollectionConfig = {
           const { totalDocs } = await req.payload.count({
             collection: 'users',
             overrideAccess: true,
+            req,
           })
           if (totalDocs === 0) {
             return {
@@ -57,6 +58,7 @@ export const Users: CollectionConfig = {
             const { totalDocs } = await req.payload.count({
               collection: 'users',
               overrideAccess: true,
+              req,
               where: {
                 and: [
                   { role: { equals: 'admin' } },
@@ -82,11 +84,13 @@ export const Users: CollectionConfig = {
           collection: 'users',
           id,
           overrideAccess: true,
+          req,
         })
         if (doc?.role === 'admin' && doc?.active !== false) {
           const { totalDocs } = await req.payload.count({
             collection: 'users',
             overrideAccess: true,
+            req,
             where: {
               and: [
                 { role: { equals: 'admin' } },
@@ -110,6 +114,7 @@ export const Users: CollectionConfig = {
             lastLogin: new Date().toISOString(),
           },
           overrideAccess: true,
+          req,
         })
       },
     ],

@@ -54,9 +54,13 @@
 - `pnpm generate:importmap`: **Pass**
 - `pnpm generate:types`: **Pass**
 - `pnpm payload migrate:create initial`: **Pass** (`src/migrations/20261121_074209_initial.ts`)
-- `pnpm lint`: **Pass** (0 errors; 4 unused-arg warnings in Payload's generated `src/migrations/20261121_074209_initial.ts`)
+- `pnpm lint`: **Pass** (0 errors, 0 warnings; `src/migrations/` added to ESLint ignores).
 - `pnpm typecheck`: **Pass** (`tsc --noEmit` exited with code 0)
 - `pnpm build`: **Pass** (64 static/SSG pages + dynamic `/admin` and `/api` routes built cleanly)
+
+## Review fix applied
+- Passed `req` to all Local API calls inside `Users` hooks (`beforeChange` counts, `beforeDelete` `findByID` and `count`, and `afterLogin` `update`) so they execute inside the active database transaction during first-user registration.
+- Added `src/migrations/` to `eslint.config.mjs` `ignores`.
 
 ## Next steps for the developer
 1. Open `http://localhost:3000/admin` on the running dev server and confirm the **create-first-user** screen appears, then create your first Admin account and an Editor test account to verify the permissions matrix by hand.

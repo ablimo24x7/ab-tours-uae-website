@@ -1,6 +1,19 @@
-import React from 'react'
 import { DM_Mono, Instrument_Serif, Inter_Tight } from 'next/font/google'
+import React from 'react'
+import { FloatingWhatsApp } from '@/components/FloatingWhatsApp'
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
+import { QuoteDrawer } from '@/components/QuoteDrawer'
+import { RevealObserver } from '@/components/RevealObserver'
+import { SiteShellProvider } from '@/components/SiteShellContext'
+import { Toast } from '@/components/Toast'
+import {
+  sampleFooterProps,
+  sampleHeaderProps,
+  sampleWhatsAppProps,
+} from '@/lib/sample-shell-data'
 import './styles/tokens.css'
+import './styles/base.css'
 
 const instrumentSerif = Instrument_Serif({
   subsets: ['latin'],
@@ -38,7 +51,18 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
       className={`${instrumentSerif.variable} ${interTight.variable} ${dmMono.variable}`}
     >
       <body>
-        <main>{children}</main>
+        <SiteShellProvider>
+          <a className="sr" href="#main">
+            Skip to content
+          </a>
+          <Header {...sampleHeaderProps} />
+          <main id="main">{children}</main>
+          <Footer {...sampleFooterProps} />
+          <FloatingWhatsApp {...sampleWhatsAppProps} />
+          <QuoteDrawer replyTimeText="[response time]" />
+          <Toast />
+          <RevealObserver />
+        </SiteShellProvider>
       </body>
     </html>
   )

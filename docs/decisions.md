@@ -4,6 +4,7 @@ Decisions made by Beetrix360 and AB Tours that the build must follow. Newest fir
 
 | Date | Decision |
 |---|---|
+| 21 Nov 2026 | **The developer runs the dev server.** Antigravity only writes code and runs commands that finish by themselves (lint, typecheck, build, install, git). |
 | 21 Nov 2026 | **Dev first, tests later.** Phases are checked in the dev server in the browser, with lint and typecheck. Automated tests (Playwright, vitest) wait until phase 12. No command is waited on for more than 3 minutes. |
 | 21 Nov 2026 | **Hosting: Vercel.** Hosted PostgreSQL in production, Vercel Blob for media (direct uploads, to get around the 4.5 MB limit), Vercel Cron for scheduled publishing (Pro plan for runs more often than daily). No accounts are created or linked until phase 13. |
 | 21 Nov 2026 | **Front end first.** Build every public page with temporary prototype data (phase 02A) before the database and CMS. The database is set up at the start of phase 03. |

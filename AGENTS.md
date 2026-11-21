@@ -98,9 +98,10 @@ URLs are built by the system from type, slug and parent. Editors never type a fr
    - alt text from the media library;
    - support for `prefers-reduced-motion`.
 5. Performance: `next/image` for photos; videos `muted playsinline`, lazy and paused when off screen; no layout shift from fonts.
-6. **Dev first, tests later.** Each phase is checked by running `pnpm dev` and looking at the pages in the browser, plus `pnpm lint` and `pnpm typecheck`. Run `pnpm build` once at the end of a phase.
+6. **Dev first, tests later.** Each phase is checked by looking at the pages in the browser, on the dev server the developer runs, plus `pnpm lint` and `pnpm typecheck`. Run `pnpm build` once at the end of a phase.
    - Do **not** write or run automated tests (Playwright, vitest) before phase 12, unless a prompt or the reviewer explicitly asks for one.
-   - Never wait on a command that doesn't exit. Start `pnpm dev` in the background and leave it running; don't block on it.
+   - **The developer runs the dev server, not you.** Never start, restart or stop `pnpm dev`, `pnpm start` or any other long-running process. Assume it is already running at `http://localhost:3000` and reloads your changes. If you need a page checked, ask the developer to open it and tell you what they see.
+   - Only run commands that finish by themselves: `pnpm lint`, `pnpm typecheck`, `pnpm build`, `pnpm install`, `pnpm generate:types`, git.
    - If any command runs for more than 3 minutes without finishing, stop it and report what happened, instead of waiting.
    - Use pnpm. Use npm or yarn only if the project was set up with them.
 7. Commit at the end of each phase with a clear message.

@@ -120,5 +120,5 @@ Message for Antigravity (after stopping the stuck task):
 > Phase 01, close it:
 > 1. Stop the running `pnpm test:e2e` and its dev server. Don't run tests again before phase 12 (see rule 6 in `AGENTS.md`).
 > 2. In `playwright.config.ts`, change the reporter to `[['list'], ['html', { open: 'never' }]]` so future test runs always exit. Don't run it.
-> 3. Start `pnpm dev` in the background, check `http://localhost:3000/` loads within a minute, and say in the report whether it did. If it doesn't, stop it after 3 minutes and report what the terminal showed.
+> 3. Don't start or stop the dev server; the developer runs it (rule 6 in `AGENTS.md`). The reviewer confirmed at 00:43 that `http://localhost:3000/` returns 200 in the dev server.
 > 4. Write `reports/phase-01.md` (versions, what was built, how to run it, lint, typecheck and build results, the deferred database and test items) and make the first commit.

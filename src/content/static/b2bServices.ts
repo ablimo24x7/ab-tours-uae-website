@@ -1,0 +1,83 @@
+import type { B2BServiceItem } from '../types'
+import { IMG, img } from './media'
+
+export const b2bServices: B2BServiceItem[] = [
+  {
+    slug: 'dmc-services',
+    title: 'DMC Services',
+    shortLine: 'Ground handling for agencies',
+    lead: 'Ground handling in the UAE for travel agencies and tour operators.',
+    heroImage: img(IMG.handshake, 'DMC Services', 1600),
+    secondaryImage: img(IMG.coffee, 'Arabic coffee hospitality', 1100),
+    description: '[Service description from the CMS.]',
+    whatWeHandle: [
+      'Hotel contracting and rates',
+      'Guides and excursions',
+      'Transfers and transport',
+      '24/7 local support',
+    ],
+  },
+  {
+    slug: 'transportation-services',
+    title: 'Transportation Services',
+    shortLine: 'With AB Transport',
+    lead: 'Chauffeur, airport and group transport, delivered with our sister company AB Transport.',
+    heroImage: img(IMG.chauffeur, 'Transportation Services', 1600),
+    secondaryImage: img(IMG.airport, 'Airport transfer service', 1100),
+    description: '[Service description from the CMS.]',
+    whatWeHandle: [
+      'Airport meet and greet',
+      'Chauffeur and VIP cars',
+      'Coaches for groups',
+      'Event shuttles',
+    ],
+    externalLinkLabel: 'Visit AB Transport · ab.limo',
+    externalLinkHref: 'https://ab.limo',
+    externalLinkToast: 'Opens AB Transport at ab.limo.',
+  },
+  {
+    slug: 'mice',
+    title: 'MICE',
+    shortLine: 'Meetings, incentives, events',
+    lead: 'Meetings, incentives, conferences and exhibitions across the UAE.',
+    heroImage: img(IMG.conference, 'MICE conferences and events', 1600),
+    secondaryImage: img(IMG.gala, 'Gala dinner event', 1100),
+    description: '[Service description from the CMS.]',
+    whatWeHandle: [
+      'Venue sourcing',
+      'Incentive programmes',
+      'Delegate transport',
+      'On-site event team',
+    ],
+  },
+  {
+    slug: 'visa-services',
+    title: 'Visa Services',
+    shortLine: 'UAE visa support',
+    lead: 'UAE visa support for tourists, groups and business visitors.',
+    heroImage: img(IMG.passport, 'Visa Services', 1600),
+    secondaryImage: img(IMG.map, 'Travel planning and documents', 1100),
+    description: '[Service description from the CMS.]',
+    whatWeHandle: [
+      'Tourist visas',
+      'Group visas',
+      'Business visit visas',
+      'Document checks',
+    ],
+  },
+  {
+    slug: 'corporate-travel',
+    title: 'Corporate Travel',
+    shortLine: 'Business trips handled',
+    lead: 'Business trips to and within the UAE, handled end to end.',
+    heroImage: img(IMG.airport, 'Corporate Travel', 1600),
+    secondaryImage: img(IMG.hotel, 'Business hotel accommodation', 1100),
+    description: '[Service description from the CMS.]',
+    whatWeHandle: [
+      'Flights and hotels',
+      'Transport and meetings',
+      'Travel policies',
+      'Account management',
+    ],
+  },
+]

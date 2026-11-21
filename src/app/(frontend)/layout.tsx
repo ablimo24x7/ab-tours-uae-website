@@ -7,13 +7,10 @@ import { QuoteDrawer } from '@/components/QuoteDrawer'
 import { RevealObserver } from '@/components/RevealObserver'
 import { SiteShellProvider } from '@/components/SiteShellContext'
 import { Toast } from '@/components/Toast'
-import {
-  sampleFooterProps,
-  sampleHeaderProps,
-  sampleWhatsAppProps,
-} from '@/lib/sample-shell-data'
+import { getSiteData } from '@/content'
 import './styles/tokens.css'
 import './styles/base.css'
+import './styles/sections.css'
 
 const instrumentSerif = Instrument_Serif({
   subsets: ['latin'],
@@ -44,6 +41,7 @@ export const metadata = {
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
+  const site = getSiteData()
 
   return (
     <html
@@ -55,11 +53,11 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
           <a className="sr" href="#main">
             Skip to content
           </a>
-          <Header {...sampleHeaderProps} />
+          <Header {...site.header} />
           <main id="main">{children}</main>
-          <Footer {...sampleFooterProps} />
-          <FloatingWhatsApp {...sampleWhatsAppProps} />
-          <QuoteDrawer replyTimeText="[response time]" />
+          <Footer {...site.footer} />
+          <FloatingWhatsApp {...site.whatsapp} />
+          <QuoteDrawer replyTimeText={site.replyTimeText} />
           <Toast />
           <RevealObserver />
         </SiteShellProvider>

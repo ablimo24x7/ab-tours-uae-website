@@ -7,7 +7,7 @@ import { QuoteDrawer } from '@/components/QuoteDrawer'
 import { RevealObserver } from '@/components/RevealObserver'
 import { SiteShellProvider } from '@/components/SiteShellContext'
 import { Toast } from '@/components/Toast'
-import { getSiteData } from '@/content'
+import { getCMSSiteShell } from '@/content/globals'
 import './styles/tokens.css'
 import './styles/base.css'
 import './styles/sections.css'
@@ -41,23 +41,25 @@ export const metadata = {
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
-  const site = getSiteData()
+  const { header, footer, whatsappNumber, replyTimeText, colourStyle } =
+    await getCMSSiteShell()
 
   return (
     <html
       lang="en"
       className={`${instrumentSerif.variable} ${interTight.variable} ${dmMono.variable}`}
+      style={colourStyle as React.CSSProperties}
     >
       <body>
         <SiteShellProvider>
           <a className="sr" href="#main">
             Skip to content
           </a>
-          <Header {...site.header} />
+          <Header {...header} />
           <main id="main">{children}</main>
-          <Footer {...site.footer} />
-          <FloatingWhatsApp {...site.whatsapp} />
-          <QuoteDrawer replyTimeText={site.replyTimeText} />
+          <Footer {...footer} />
+          <FloatingWhatsApp number={whatsappNumber} />
+          <QuoteDrawer replyTimeText={replyTimeText} />
           <Toast />
           <RevealObserver />
         </SiteShellProvider>

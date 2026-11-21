@@ -5,7 +5,7 @@ import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 // (Payload throws if redirectsPlugin is registered with no collections).
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { s3Storage } from '@payloadcms/storage-s3'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import path from 'path'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
@@ -13,11 +13,17 @@ import { fileURLToPath } from 'url'
 
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
+import { Branding } from './globals/Branding'
+import { ContactDetails } from './globals/ContactDetails'
+import { Footer } from './globals/Footer'
+import { FormSettings } from './globals/FormSettings'
+import { Header } from './globals/Header'
+import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-const s3Enabled = Boolean(process.env.S3_BUCKET)
+const blobEnabled = Boolean(process.env.BLOB_READ_WRITE_TOKEN)
 const smtpPort = Number(process.env.SMTP_PORT || 587)
 
 export default buildConfig({
@@ -26,8 +32,22 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      graphics: {
+        Logo: '/components/admin/AdminLogo#AdminLogo',
+        Icon: '/components/admin/AdminIcon#AdminIcon',
+      },
+    },
   },
   collections: [Users, Media],
+  globals: [
+    Branding,
+    Header,
+    Footer,
+    ContactDetails,
+    SiteSettings,
+    FormSettings,
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -35,7 +55,8 @@ export default buildConfig({
   },
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || '',
+      connectionString:
+        process.env.DATABASE_URI || process.env.DATABASE_URL || '',
     },
   }),
   email: process.env.SMTP_HOST
@@ -63,21 +84,15 @@ export default buildConfig({
     nestedDocsPlugin({
       collections: [],
     }),
-    ...(s3Enabled
+    ...(blobEnabled
       ? [
-          s3Storage({
+          vercelBlobStorage({
+            enabled: true,
             collections: {
               media: true,
             },
-            bucket: process.env.S3_BUCKET || '',
-            config: {
-              region: process.env.S3_REGION || 'us-east-1',
-              endpoint: process.env.S3_ENDPOINT || undefined,
-              credentials: {
-                accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
-                secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
-              },
-            },
+            token: process.env.BLOB_READ_WRITE_TOKEN,
+            clientUploads: true,
           }),
         ]
       : []),

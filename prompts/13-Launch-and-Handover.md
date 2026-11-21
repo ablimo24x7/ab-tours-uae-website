@@ -27,20 +27,18 @@ Follow `00-Project-Rules.md`. The proposal commits to delivering on **7 December
 - Error pages and logging without personal data.
 
 ## 2. `DEPLOYMENT.md` — Vercel
-**Accounts are connected in this phase only, and only when Beetrix360 confirms which accounts to use.** The Vercel team and plan, the database provider and the Blob store must be in AB Tours' name or approved by AB Tours.
-
-Step-by-step deployment to Vercel:
-- Import the Git repository into a Vercel project (framework: Next.js).
-- Create a hosted PostgreSQL database (for example Neon from the Vercel Marketplace) and set `DATABASE_URI` to its connection string, as the provider recommends for serverless.
+The Vercel project (AB Group team), the GitHub repository and the Neon database were set up by Beetrix360 on 21 November. Document how they are set up, for the handover:
+- the GitHub repository and how pushes to `main` deploy;
+- Neon: the main branch for production, the `dev` branch for local development, and the free-plan limits (1 GB storage per project, 100 compute-hours a month, 10 branches, suspend after 5 minutes idle, so the first request after a quiet period is slower). Say whether the site is close to any limit and when to move to a paid Neon plan;
 - Create a Vercel Blob store and set `BLOB_READ_WRITE_TOKEN`. Check that uploads larger than 4.5 MB (videos) work through `clientUploads`.
 - Set every other environment variable for Production and Preview.
-- Run database migrations before the new deployment serves traffic, for example `payload migrate` in the build step. Document the exact command.
+- Migrations run in the Vercel build (`build:vercel`, from phase 03). Document how to create one and what happens when one fails (the deployment is rejected).
 - Cron jobs from `vercel.json` are active, and the plan supports the schedule (Pro).
 - Connect the .ae domain in Vercel and confirm SSL.
 - Email: SMTP settings, with SPF/DKIM notes for the sending domain.
 - Backups: the database provider's backup and restore, plus how to export the Blob store.
 - Roll back with Vercel's instant rollback, and how to handle a migration that must be reversed.
-- Preview deployments use a separate database branch or database, never production data.
+- Preview deployments never use production data: either turn on Neon's per-branch Preview databases (mind the 10-branch limit on the free plan) or keep work on `main` only.
 
 ## 3. Launch checklist (`LAUNCH-CHECKLIST.md`)
 - DNS and SSL.

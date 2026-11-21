@@ -2,11 +2,18 @@
 
 Follow `00-Project-Rules.md`.
 
-**Before starting — database setup (deferred from phase 01):**
-1. Ask for the PostgreSQL password and put it only in `.env`.
-2. Create the `ab_tours_uae` database on the local PostgreSQL 18 server.
-3. Confirm `/admin` shows the create-first-user screen.
-4. Leave the skipped `/admin` smoke test skipped; tests are re-enabled in phase 12.
+**Before starting — database and migrations (the developer has created Neon on Vercel with a `dev` branch):**
+1. Ask the developer to put the Neon **`dev` branch** connection string in the local `.env` as `DATABASE_URI`. Never write it anywhere else.
+2. In `payload.config.ts`, set the Postgres adapter's connection string to `process.env.DATABASE_URI || process.env.DATABASE_URL`, so Vercel uses the integration's `DATABASE_URL`. Update `.env.example` and the README to match. Remove the local-PostgreSQL-only wording, and keep PostgreSQL 18 as an optional fallback.
+3. Ask the developer to open `/admin` on their running dev server and confirm the create-first-user screen appears.
+4. Migrations for Vercel, following Payload's migrations docs:
+   - after this phase's collections and globals exist, create the first migration with `pnpm payload migrate:create initial` and commit it;
+   - add a script `build:vercel` that runs `payload migrate` and then `pnpm build`. Run the migration with the **direct** connection (`DATABASE_URL_UNPOOLED`) rather than the pooled one, and check Neon's pooling notes for why;
+   - add `vercel.json` with `"buildCommand": "pnpm run build:vercel"`;
+   - every later phase that changes collections, globals or fields must add a new migration;
+   - never run `payload migrate` against the `dev` branch (it uses push).
+5. Leave the skipped `/admin` smoke test skipped; tests are re-enabled in phase 12.
+6. In the report, tell the developer to push, then open `/admin` on the Vercel deployment and create the first Admin there.
 
 ## Goal
 The admin panel with the user hierarchy, the media library, and every site-wide setting. The header, footer, chat button and quote panel from phase 02 must read from these settings.

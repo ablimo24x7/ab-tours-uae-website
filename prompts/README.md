@@ -27,7 +27,7 @@ These prompts build the AB Tours UAE website and CMS from the approved prototype
 | 01 | Project setup | Next.js + Payload CMS 3 app running locally with Postgres |
 | 02 | Design system and site shell | Tokens, fonts, components, header, footer, menus, quote panel |
 | 02A | Front end of every page | Homepage and all templates built with temporary prototype data, no database |
-| — | Database setup | Local PostgreSQL password and database, at the start of phase 03 |
+| — | Database setup | Neon on Vercel (free plan): `dev` branch for local work, migrations for production, at the start of phase 03 |
 | 03 | CMS foundation | Users and roles, media, site-wide settings (branding, header, footer, contact, forms) |
 | 04 | Content collections | Every content type with its fields |
 | 05 | Page builder and routing | Block library, customisable Pages, nested pages, URL resolution |

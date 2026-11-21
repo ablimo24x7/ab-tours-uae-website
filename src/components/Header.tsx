@@ -14,6 +14,8 @@ export function Header({
   logoPrimary,
   logoSecondary,
   logoSubtext,
+  logoImage,
+  logoWhiteImage,
   navGroups,
   ctaLabel,
   ctaHref,
@@ -89,11 +91,23 @@ export function Header({
 
         <div className="wrap bar">
           <Link className="logo" href="/" aria-label="AB Tours UAE home">
-            <b>
-              <span>{logoPrimary}</span>
-              <span>{logoSecondary}</span>
-            </b>
-            <small>{logoSubtext}</small>
+            {(isSolid ? logoImage : logoWhiteImage || logoImage) ? (
+              <Image
+                src={(isSolid ? logoImage : logoWhiteImage || logoImage)!.url}
+                alt={(isSolid ? logoImage : logoWhiteImage || logoImage)!.alt || 'AB Tours UAE'}
+                width={150}
+                height={42}
+                style={{ height: '38px', width: 'auto', objectFit: 'contain' }}
+              />
+            ) : (
+              <>
+                <b>
+                  <span>{logoPrimary}</span>
+                  <span>{logoSecondary}</span>
+                </b>
+                <small>{logoSubtext}</small>
+              </>
+            )}
           </Link>
 
           <nav className="mainnav" aria-label="Main">

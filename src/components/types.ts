@@ -38,6 +38,8 @@ export interface HeaderProps {
   logoPrimary: string
   logoSecondary: string
   logoSubtext: string
+  logoImage?: MediaAsset
+  logoWhiteImage?: MediaAsset
   navGroups: NavGroup[]
   ctaLabel: string
   ctaHref: string
@@ -57,6 +59,7 @@ export interface FooterProps {
   logoPrimary: string
   logoSecondary: string
   logoSubtext: string
+  logoImage?: MediaAsset
   description: string
   address: string
   phone: string

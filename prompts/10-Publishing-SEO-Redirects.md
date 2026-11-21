@@ -7,11 +7,11 @@ Follow `00-Project-Rules.md`. Use the official Payload docs for every option bel
 - Enable `schedulePublish` (`versions.drafts.schedulePublish: true`).
 - Scheduled publishing runs as a background job in the Payload **Jobs Queue**. The site runs on Vercel, so:
   - do **not** use `autoRun`;
-  - add `vercel.json` with **Vercel Cron** jobs that call Payload's jobs endpoints (`/api/payload-jobs/handle-schedules` and `/api/payload-jobs/run`, as named in the Payload Jobs Queue docs for serverless platforms);
+  - add **Vercel Cron** jobs to the existing `vercel.json` (created in phase 03) that call Payload's jobs endpoints (`/api/payload-jobs/handle-schedules` and `/api/payload-jobs/run`, as named in the Payload Jobs Queue docs for serverless platforms);
   - protect those calls with `CRON_SECRET`, following the current Vercel Cron documentation for how the secret is sent.
 - Vercel's Hobby plan runs cron jobs at most **once per day**, so scheduled posts could go live hours late. The Pro plan allows once per minute. Set the schedule for Pro (every 5 minutes) and note the plan requirement in the README.
 - For local testing, provide a script that calls the same endpoints with the secret.
-- Do not create or link a Vercel project.
+- Do not change Vercel project settings; cron comes from `vercel.json` in the repository.
 - The public site shows published content only.
 
 ## 2. Live preview

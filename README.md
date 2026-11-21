@@ -27,26 +27,23 @@ This repository is prepared for **Antigravity** to build in phases, with **Claud
 ### Prerequisites
 - Node.js (`^22.23.5 || ^24.22.3 || >=26.13.1` — see `.nvmrc`)
 - pnpm (`corepack enable` or `npm i -g pnpm`)
-- PostgreSQL 18 (local Windows service `postgresql-x64-18`)
+- Access to the Neon PostgreSQL `dev` branch (or local PostgreSQL 18 as an optional offline fallback)
 
 ### Setup
-1. Create the `ab_tours_uae` database on your local PostgreSQL 18 server using `createdb` or pgAdmin:
-   ```bash
-   createdb -U postgres ab_tours_uae
-   ```
-2. Copy `.env.example` to `.env`, set `DATABASE_URI` with your PostgreSQL password, and set `PAYLOAD_SECRET`:
+1. Copy `.env.example` to `.env`, set `DATABASE_URI` to the Neon **`dev`** branch connection string, and set `PAYLOAD_SECRET`:
    ```bash
    cp .env.example .env
    ```
-3. Install dependencies:
+   *(Optional offline fallback: create an `ab_tours_uae` database on a local PostgreSQL 18 server and point `DATABASE_URI` to it.)*
+2. Install dependencies:
    ```bash
    pnpm install
    ```
-4. Start the development server:
+3. Start the development server:
    ```bash
    pnpm dev
    ```
-5. Open `http://localhost:3000` for the public site and `http://localhost:3000/admin` for the Payload admin panel.
+4. Open `http://localhost:3000` for the public site and `http://localhost:3000/admin` for the Payload admin panel.
 
 ### Useful scripts
 - `pnpm dev` — start Next.js + Payload in development mode

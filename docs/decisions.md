@@ -6,7 +6,8 @@ Decisions made by Beetrix360 and AB Tours that the build must follow. Newest fir
 |---|---|
 | 21 Nov 2026 | **The developer runs the dev server.** Antigravity only writes code and runs commands that finish by themselves (lint, typecheck, build, install, git). |
 | 21 Nov 2026 | **Dev first, tests later.** Phases are checked in the dev server in the browser, with lint and typecheck. Automated tests (Playwright, vitest) wait until phase 12. No command is waited on for more than 3 minutes. |
-| 21 Nov 2026 | **Hosting: Vercel.** Hosted PostgreSQL in production, Vercel Blob for media (direct uploads, to get around the 4.5 MB limit), Vercel Cron for scheduled publishing (Pro plan for runs more often than daily). No accounts are created or linked until phase 13. |
+| 21 Nov 2026 | **Hosting: Vercel** (AB Group team, paid plan; GitHub `ablimo24x7/ab-tours-uae-website`). Vercel Blob for media (direct uploads, to get around the 4.5 MB limit) and Vercel Cron for scheduled publishing. |
+| 21 Nov 2026 | **Database: Neon PostgreSQL, free plan, through the Vercel Marketplace.** Main branch for production (migrations only); `dev` branch for local development (schema push). Local PostgreSQL 18 is an optional fallback. |
 | 21 Nov 2026 | **Front end first.** Build every public page with temporary prototype data (phase 02A) before the database and CMS. The database is set up at the start of phase 03. |
 | 20 Nov 2026 | **No Docker.** Local development uses the PostgreSQL 18 server installed on the machine (Windows service `postgresql-x64-18`). |
 | 20 Nov 2026 | Build a **day trip detail page** at `/uae-experiences/day-trips/{trip}` from existing C6 components. C6 has no design for it; the proposal lists every day trip as its own CMS item. |
@@ -27,5 +28,5 @@ Decisions made by Beetrix360 and AB Tours that the build must follow. Newest fir
 - Final .ae domain.
 - UAE tourism licence numbers.
 - Reply-time promise and the email addresses for each enquiry route.
-- Vercel team and plan (Pro recommended), the hosted PostgreSQL provider and the Blob store: whose account each is in.
+- Blob store: create in the AB Group Vercel team when phase 03 needs it.
 - Cookie banner: wanted or not.

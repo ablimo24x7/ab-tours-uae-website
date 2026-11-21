@@ -18,8 +18,13 @@ You are building the production website and CMS for **AB Tours UAE**, the UAE de
 
 ## Stack (fixed — do not substitute)
 - **Next.js** (App Router, TypeScript, React Server Components) with **Payload CMS 3** installed in the same app. The admin panel is at `/admin`.
-- **Hosting: Vercel.** The site will be deployed to Vercel. Write the code so it runs there, but **do not create, log in to or link any Vercel, database, storage or email account**, and do not run `vercel login`, `vercel link` or `vercel deploy`, until Beetrix360 asks in phase 13.
-- **PostgreSQL** via `@payloadcms/db-postgres`, connected with `DATABASE_URI`. Development uses the local PostgreSQL 18 server. Production uses a hosted PostgreSQL (for example Neon or Supabase from the Vercel Marketplace), chosen in phase 13.
+- **Hosting: Vercel** (AB Group team, paid plan). Beetrix360 has already created the GitHub repository (`ablimo24x7/ab-tours-uae-website`), the Vercel project and the Neon database. **You never change Vercel, Neon or GitHub settings**, and never run the `vercel` or `neon` command-line tools. You commit; the developer pushes, and every push to `main` deploys to Vercel.
+- **Database: Neon PostgreSQL** (free plan, added through the Vercel Marketplace), with `@payloadcms/db-postgres`.
+  - **Production** uses Neon's main branch. The Vercel integration provides `DATABASE_URL` (pooled) and `DATABASE_URL_UNPOOLED` (direct).
+  - **Local development** uses a separate Neon branch named `dev`. Its connection string goes in the local `.env` as `DATABASE_URI`. The local PostgreSQL 18 server is an optional offline fallback.
+  - The adapter reads `DATABASE_URI` first, then `DATABASE_URL`.
+  - **Never mix schema push and migrations on one database** (Payload's docs warn against it). In development, Payload pushes schema changes to the `dev` branch automatically. Production changes only through committed migrations: `pnpm payload migrate:create`, then `payload migrate` in the Vercel build.
+  - Never point the dev server, push mode or `vercel env pull` at the production database.
 - Media storage: local disk in development. In production use **Vercel Blob** (`@payloadcms/storage-vercel-blob`), enabled only when `BLOB_READ_WRITE_TOKEN` is set, with `clientUploads: true`. Vercel Functions accept request bodies of at most 4.5 MB, and AB Tours will upload videos larger than that, so uploads must go directly from the browser to storage.
 - Vercel has no persistent disk. Never write files to the server's file system at runtime in production.
 - Email: `@payloadcms/email-nodemailer` (SMTP from environment variables).

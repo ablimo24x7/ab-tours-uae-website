@@ -69,7 +69,6 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
-    redirects: Redirect;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -79,7 +78,6 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -89,8 +87,22 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    branding: Branding;
+    header: Header;
+    footer: Footer;
+    'contact-details': ContactDetail;
+    'site-settings': SiteSetting;
+    'form-settings': FormSetting;
+  };
+  globalsSelect: {
+    branding: BrandingSelect<false> | BrandingSelect<true>;
+    header: HeaderSelect<false> | HeaderSelect<true>;
+    footer: FooterSelect<false> | FooterSelect<true>;
+    'contact-details': ContactDetailsSelect<false> | ContactDetailsSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'form-settings': FormSettingsSelect<false> | FormSettingsSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -125,6 +137,10 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  name: string;
+  role: 'admin' | 'editor';
+  active?: boolean | null;
+  lastLogin?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -152,6 +168,12 @@ export interface User {
 export interface Media {
   id: number;
   alt: string;
+  caption?: string | null;
+  credit?: string | null;
+  /**
+   * Non-blocking warning shown when an uploaded image is under 2400 px wide.
+   */
+  heroWidthWarning?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -163,24 +185,40 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "redirects".
- */
-export interface Redirect {
-  id: number;
-  from: string;
-  to?: {
-    type?: ('reference' | 'custom') | null;
-    reference?: {
-      relationTo: 'media';
-      value: number | Media;
-    } | null;
-    url?: string | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    og?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    hero?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
   };
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -213,10 +251,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
-      } | null)
-    | ({
-        relationTo: 'redirects';
-        value: number | Redirect;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -265,6 +299,10 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
+  active?: T;
+  lastLogin?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -289,6 +327,9 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  caption?: T;
+  credit?: T;
+  heroWidthWarning?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -300,22 +341,50 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "redirects_select".
- */
-export interface RedirectsSelect<T extends boolean = true> {
-  from?: T;
-  to?:
+  sizes?:
     | T
     | {
-        type?: T;
-        reference?: T;
-        url?: T;
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        og?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        hero?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
       };
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -356,6 +425,485 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "branding".
+ */
+export interface Branding {
+  id: number;
+  fullColourLogo?: (number | null) | Media;
+  whiteLogo?: (number | null) | Media;
+  favicon?: (number | null) | Media;
+  defaultSocialImage?: (number | null) | Media;
+  /**
+   * Leave empty to use the approved Design C6 palette values.
+   */
+  colourOverrides?: {
+    blue?: string | null;
+    green?: string | null;
+    sun?: string | null;
+    night?: string | null;
+    cream?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header".
+ */
+export interface Header {
+  id: number;
+  tagline?: string | null;
+  topLinks?:
+    | {
+        label: string;
+        link?: {
+          type?: ('internal' | 'external') | null;
+          /**
+           * e.g. /uae-experiences/dubai (document picker added in Phase 05)
+           */
+          internalPath?: string | null;
+          url?: string | null;
+          newTab?: boolean | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  mainMenu?:
+    | {
+        label: string;
+        link?: {
+          type?: ('internal' | 'external') | null;
+          /**
+           * e.g. /uae-experiences/dubai (document picker added in Phase 05)
+           */
+          internalPath?: string | null;
+          url?: string | null;
+          newTab?: boolean | null;
+        };
+        introText?: string | null;
+        featurePhoto?: (number | null) | Media;
+        dropdownLinks?:
+          | {
+              name: string;
+              shortLine?: string | null;
+              link?: {
+                type?: ('internal' | 'external') | null;
+                /**
+                 * e.g. /uae-experiences/dubai (document picker added in Phase 05)
+                 */
+                internalPath?: string | null;
+                url?: string | null;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  ctaLabel?: string | null;
+  ctaLink?: {
+    type?: ('internal' | 'external') | null;
+    /**
+     * e.g. /uae-experiences/dubai (document picker added in Phase 05)
+     */
+    internalPath?: string | null;
+    url?: string | null;
+    newTab?: boolean | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: number;
+  description?: string | null;
+  columns?:
+    | {
+        heading: string;
+        links?:
+          | {
+              label: string;
+              link?: {
+                type?: ('internal' | 'external') | null;
+                /**
+                 * e.g. /uae-experiences/dubai (document picker added in Phase 05)
+                 */
+                internalPath?: string | null;
+                url?: string | null;
+                newTab?: boolean | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  bottomText?: string | null;
+  legalLinks?:
+    | {
+        label: string;
+        link?: {
+          type?: ('internal' | 'external') | null;
+          /**
+           * e.g. /uae-experiences/dubai (document picker added in Phase 05)
+           */
+          internalPath?: string | null;
+          url?: string | null;
+          newTab?: boolean | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-details".
+ */
+export interface ContactDetail {
+  id: number;
+  officeAddress?: string | null;
+  phone?: string | null;
+  whatsappNumber?: string | null;
+  email?: string | null;
+  officeHours?: string | null;
+  mapLink?: string | null;
+  socialLinks?:
+    | {
+        platform: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  licenceNumbers?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  siteName?: string | null;
+  seoTitleSuffix?: string | null;
+  defaultSeoDescription?: string | null;
+  analyticsId?: string | null;
+  notFoundTitle?: string | null;
+  notFoundText?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "form-settings".
+ */
+export interface FormSetting {
+  id: number;
+  recipients?: {
+    leisure?: string | null;
+    outbound?: string | null;
+    b2b?: string | null;
+  };
+  replyTimePromise?: string | null;
+  quotePlanningOptions?:
+    | {
+        label: string;
+        photo?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  budgetLevels?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  preferredContactMethods?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  consultationTopics?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  consultationMethods?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  timeSlots?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  partnerTypes?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  partnerInterests?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  thankYouHeading?: string | null;
+  thankYouText?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "branding_select".
+ */
+export interface BrandingSelect<T extends boolean = true> {
+  fullColourLogo?: T;
+  whiteLogo?: T;
+  favicon?: T;
+  defaultSocialImage?: T;
+  colourOverrides?:
+    | T
+    | {
+        blue?: T;
+        green?: T;
+        sun?: T;
+        night?: T;
+        cream?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header_select".
+ */
+export interface HeaderSelect<T extends boolean = true> {
+  tagline?: T;
+  topLinks?:
+    | T
+    | {
+        label?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              internalPath?: T;
+              url?: T;
+              newTab?: T;
+            };
+        id?: T;
+      };
+  mainMenu?:
+    | T
+    | {
+        label?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              internalPath?: T;
+              url?: T;
+              newTab?: T;
+            };
+        introText?: T;
+        featurePhoto?: T;
+        dropdownLinks?:
+          | T
+          | {
+              name?: T;
+              shortLine?: T;
+              link?:
+                | T
+                | {
+                    type?: T;
+                    internalPath?: T;
+                    url?: T;
+                    newTab?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  ctaLabel?: T;
+  ctaLink?:
+    | T
+    | {
+        type?: T;
+        internalPath?: T;
+        url?: T;
+        newTab?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  description?: T;
+  columns?:
+    | T
+    | {
+        heading?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              link?:
+                | T
+                | {
+                    type?: T;
+                    internalPath?: T;
+                    url?: T;
+                    newTab?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  bottomText?: T;
+  legalLinks?:
+    | T
+    | {
+        label?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              internalPath?: T;
+              url?: T;
+              newTab?: T;
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-details_select".
+ */
+export interface ContactDetailsSelect<T extends boolean = true> {
+  officeAddress?: T;
+  phone?: T;
+  whatsappNumber?: T;
+  email?: T;
+  officeHours?: T;
+  mapLink?: T;
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  licenceNumbers?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  siteName?: T;
+  seoTitleSuffix?: T;
+  defaultSeoDescription?: T;
+  analyticsId?: T;
+  notFoundTitle?: T;
+  notFoundText?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "form-settings_select".
+ */
+export interface FormSettingsSelect<T extends boolean = true> {
+  recipients?:
+    | T
+    | {
+        leisure?: T;
+        outbound?: T;
+        b2b?: T;
+      };
+  replyTimePromise?: T;
+  quotePlanningOptions?:
+    | T
+    | {
+        label?: T;
+        photo?: T;
+        id?: T;
+      };
+  budgetLevels?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  preferredContactMethods?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  consultationTopics?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  consultationMethods?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  timeSlots?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  partnerTypes?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  partnerInterests?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  thankYouHeading?: T;
+  thankYouText?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -11,7 +11,7 @@ Copy this folder into the repository as `prompts/` so these paths work.
 
 ## Checks for every phase
 - [ ] Only the work in the prompt was done. Nothing was added that the proposal excludes: booking, cart, payment, accounts, Arabic.
-- [ ] No Vercel, database, storage or email account was created, logged in to or linked, and nothing was deployed, unless Beetrix360 asked for it in phase 13.
+- [ ] No Vercel, Neon, GitHub or email settings were changed, no `vercel`/`neon` CLI was run, and nothing was pushed by the agent (the developer pushes).
 - [ ] No invented business content: phone numbers, prices, partner names, testimonials, licence numbers.
 - [ ] Lint and typecheck pass; build passes once at the end of the phase. No automated tests were added before phase 12 unless asked.
 - [ ] No command was left hanging (dev server in the background; nothing waited on for more than 3 minutes).
@@ -43,8 +43,12 @@ Copy this folder into the repository as `prompts/` so these paths work.
 - [ ] Every URL in `AGENTS.md` renders in the dev server and matches the prototype at 1440, 768 and 375 px (reviewer checks in the browser).
 - [ ] Every interaction from phase 06 works by hand.
 
-**Database setup (start of phase 03)**
-- [ ] `ab_tours_uae` exists locally. The password is only in `.env`. `/admin` shows the create-first-user screen.
+**Database and migrations (start of phase 03)**
+- [ ] Local `.env` points at the Neon `dev` branch, and no connection string is committed.
+- [ ] The adapter reads `DATABASE_URI`, then `DATABASE_URL`.
+- [ ] `/admin` works locally and on the Vercel deployment.
+- [ ] The first migration is committed. `build:vercel` runs `payload migrate` with the direct connection before `pnpm build`, and `vercel.json` uses it.
+- [ ] Push is never used against production, and `payload migrate` is never run against `dev`.
 
 **03 CMS foundation**
 - [ ] The permissions matrix matches the proposal exactly; checked by hand with an Admin and an Editor account (automated tests in phase 12).
